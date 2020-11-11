@@ -1,5 +1,7 @@
 package assign251_2;
 
-public class VelocityLayout {
+import org.apache.log4j.PatternLayout;
+
+public class VelocityLayout extends PatternLayout {
 
 }
