@@ -3,6 +3,7 @@ package assign251_2;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 public class MemAppender extends AppenderSkeleton {
 
 
-    private long maxSize = 10000;
+    private long maxSize = 10000;//default
     private long discardedLogCount = 0;
 
     //    private static MemAppender uniqueInstance;
@@ -37,6 +38,9 @@ public class MemAppender extends AppenderSkeleton {
     }
 
     public void setMaxSize(long value) {
+        if (value <= 1) {
+            throw new InvalidParameterException("maxSize should be bigger than 0!");
+        }
         this.maxSize = value;
     }
 
