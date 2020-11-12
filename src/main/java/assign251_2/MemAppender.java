@@ -11,6 +11,10 @@ import java.util.stream.Collectors;
 
 public class MemAppender extends AppenderSkeleton {
 
+
+  private long maxSize = 10000;
+  private long discardedLogCount = 0;
+
   //    private static MemAppender uniqueInstance;
   private CopyOnWriteArrayList<LoggingEvent> lstEvents = new CopyOnWriteArrayList<>();
 
@@ -28,8 +32,24 @@ public class MemAppender extends AppenderSkeleton {
 //        return uniqueInstance;
 //    }
 
+  public long getMaxSize() {
+    return this.maxSize;
+  }
+
+  public void setMaxSize(long value) {
+    this.maxSize = value;
+  }
+
+  public long getDiscardedLogCount() {
+    return this.discardedLogCount;
+  }
+
   @Override
   protected void append(LoggingEvent loggingEvent) {
+    if (this.lstEvents.size() > this.maxSize) {
+      this.lstEvents.remove(0);
+      this.discardedLogCount++;
+    }
     String formated = this.layout.format(loggingEvent);
     this.lstEvents.add(loggingEvent);
 //    System.out.println(loggingEvent.getRenderedMessage());
