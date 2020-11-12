@@ -35,10 +35,11 @@ public class VelocityLayout extends Layout {
 
         StringWriter sw = new StringWriter();
         String vt = this.pattern;
-        context.put("c", event.getLoggerName());
+        //http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/spi/LoggingEvent.html
+        context.put("c", event.getLoggerName());//categoryName is deprecated
         context.put("d", new Date().toString());
         context.put("m", event.getMessage());
-        context.put("p", event.getProperty("root"));
+        context.put("p", event.getProperty("root"));//don't know use which key
         context.put("t", event.getThreadName());
         context.put("n", System.lineSeparator());
         Velocity.evaluate(context, sw, "", vt);

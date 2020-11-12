@@ -10,19 +10,29 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class VelocityLayoutTests {
-    LoggingEvent event = new LoggingEvent("testCategory", Category.getRoot(), Priority.DEBUG, "someMessage", new Exception("someException"));
-    VelocityLayout layout = new VelocityLayout();
+
 
     @Before
-    public void init() {
+    public void basicTest() {
+        LoggingEvent event = new LoggingEvent("testCategory", Category.getRoot(), Priority.DEBUG, "someMessage", new Exception("someException"));
+        VelocityLayout layout = new VelocityLayout();
         assertEquals("someMessage", layout.format(event).trim());
     }
 
     @Test
-    public void toStringTest1() {
+    public void setConversionPatternTest() {
+        LoggingEvent event = new LoggingEvent("testCategory", Category.getRoot(), Priority.DEBUG, "someMessage", new Exception("someException"));
+        VelocityLayout layout = new VelocityLayout();
         layout.setConversionPattern("now is [$d] this is thread [$t] we got exception [$m]");
         String formattedLog = layout.format(event).trim();
         Assert.assertTrue(formattedLog.startsWith("now is ["));
         Assert.assertTrue(formattedLog.endsWith("this is thread [main] we got exception [someMessage]"));
+    }
+
+    @Test
+    public void constructorTest() {
+        LoggingEvent event = new LoggingEvent("testCategory", Category.getRoot(), Priority.DEBUG, "someMessage", new Exception("someException"));
+        VelocityLayout layout = new VelocityLayout("we got exception [$m]");
+        assertEquals("we got exception [someMessage]", layout.format(event).trim());
     }
 }
