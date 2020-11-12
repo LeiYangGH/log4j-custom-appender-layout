@@ -46,7 +46,7 @@ public class MemAppender extends AppenderSkeleton {
 
   @Override
   protected void append(LoggingEvent loggingEvent) {
-    if (this.lstEvents.size() > this.maxSize) {
+    if (this.lstEvents.size() >= this.maxSize) {
       this.lstEvents.remove(0);
       this.discardedLogCount++;
     }
