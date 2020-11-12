@@ -10,22 +10,23 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class MemAppender extends AppenderSkeleton {
-    private static MemAppender uniqueInstance;
+
+//    private static MemAppender uniqueInstance;
     private CopyOnWriteArrayList<LoggingEvent> lstEvents = new CopyOnWriteArrayList<>();
 
-    private MemAppender() {
-    }
-
-    public static MemAppender getInstance() {
-        if (uniqueInstance == null) {
-            synchronized (MemAppender.class) {
-                // check again to avoid multi-thread access
-                if (uniqueInstance == null)
-                    uniqueInstance = new MemAppender();
-            }
-        }
-        return uniqueInstance;
-    }
+//    private MemAppender() {
+//    }
+//
+//    public static MemAppender getInstance() {
+//        if (uniqueInstance == null) {
+//            synchronized (MemAppender.class) {
+//                // check again to avoid multi-thread access
+//                if (uniqueInstance == null)
+//                    uniqueInstance = new MemAppender();
+//            }
+//        }
+//        return uniqueInstance;
+//    }
 
     @Override
     protected void append(LoggingEvent loggingEvent) {
@@ -39,7 +40,7 @@ public class MemAppender extends AppenderSkeleton {
 
     @Override
     public boolean requiresLayout() {
-        return false;
+        return true;
     }
 
     public List<LoggingEvent> getCurrentLogs() {
