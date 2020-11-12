@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 public class MemAppender extends AppenderSkeleton {
 
-//    private static MemAppender uniqueInstance;
-    private CopyOnWriteArrayList<LoggingEvent> lstEvents = new CopyOnWriteArrayList<>();
+  //    private static MemAppender uniqueInstance;
+  private CopyOnWriteArrayList<LoggingEvent> lstEvents = new CopyOnWriteArrayList<>();
 
 //    private MemAppender() {
 //    }
@@ -28,35 +28,38 @@ public class MemAppender extends AppenderSkeleton {
 //        return uniqueInstance;
 //    }
 
-    @Override
-    protected void append(LoggingEvent loggingEvent) {
-        this.lstEvents.add(loggingEvent);
-    }
+  @Override
+  protected void append(LoggingEvent loggingEvent) {
+    String formated = this.layout.format(loggingEvent);
+    this.lstEvents.add(loggingEvent);
+//    System.out.println(loggingEvent.getRenderedMessage());
+    System.out.println(formated);
+  }
 
-    @Override
-    public void close() {
+  @Override
+  public void close() {
 
-    }
+  }
 
-    @Override
-    public boolean requiresLayout() {
-        return true;
-    }
+  @Override
+  public boolean requiresLayout() {
+    return true;
+  }
 
-    public List<LoggingEvent> getCurrentLogs() {
-        return Collections.unmodifiableList(this.lstEvents);
-    }
+  public List<LoggingEvent> getCurrentLogs() {
+    return Collections.unmodifiableList(this.lstEvents);
+  }
 
-    public List<String> getEventStrings() {
-        return Collections.unmodifiableList(this.getCurrentLogs().stream().map(x ->
-                x.getRenderedMessage()).collect(Collectors.toList()));
-    }
+  public List<String> getEventStrings() {
+    return Collections.unmodifiableList(this.getCurrentLogs().stream().map(x ->
+        x.getRenderedMessage()).collect(Collectors.toList()));
+  }
 
-    public void printLogs() {
-        for (String s : getEventStrings()) {
-            System.out.println(s);
-        }
-        this.lstEvents.clear();
+  public void printLogs() {
+    for (String s : getEventStrings()) {
+      System.out.println(s);
     }
+    this.lstEvents.clear();
+  }
 
 }
