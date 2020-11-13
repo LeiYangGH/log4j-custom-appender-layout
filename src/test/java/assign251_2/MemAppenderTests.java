@@ -23,9 +23,7 @@ public class MemAppenderTests {
   @Before
   public void initEachAppenderTest()
       throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-    Field instance = MemAppender.class.getDeclaredField("uniqueInstance");
-    instance.setAccessible(true);
-    instance.set(null, null);
+    Helpers.initEachAppender();
   }
 
 
