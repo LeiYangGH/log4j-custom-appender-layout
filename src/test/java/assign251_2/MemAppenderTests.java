@@ -29,22 +29,16 @@ public class MemAppenderTests {
   }
 
 
-  private void addSampleLoggingEvent() {
-    LoggingEvent event = new LoggingEvent("", Category.getRoot(), Priority.DEBUG, "",
-        new Exception(""));
-    appender.append(event);
-  }
-
   @Test
   public void DiscardedLogCountTest() throws ConfigurationException {
     appender.setMaxSize(2);
     appender.setLayout(new VelocityLayout());
-    addSampleLoggingEvent();
-    addSampleLoggingEvent();
+    Helpers.addSampleLoggingEvent(appender);
+    Helpers.addSampleLoggingEvent(appender);
     assertEquals(0, appender.getDiscardedLogCount());
-    addSampleLoggingEvent();
+    Helpers.addSampleLoggingEvent(appender);
     assertEquals(1, appender.getDiscardedLogCount());
-    addSampleLoggingEvent();
+    Helpers.addSampleLoggingEvent(appender);
     assertEquals(2, appender.getDiscardedLogCount());
   }
 
@@ -52,15 +46,15 @@ public class MemAppenderTests {
   public void setArrayListTest() throws ConfigurationException {
     appender.setMaxSize(2);
     appender.setLayout(new VelocityLayout());
-    addSampleLoggingEvent();
-    addSampleLoggingEvent();
+    Helpers.addSampleLoggingEvent(appender);
+    Helpers.addSampleLoggingEvent(appender);
     appender.setEventsList(new ArrayList<>());
     assertEquals(0, appender.getDiscardedLogCount());
-    addSampleLoggingEvent();
+    Helpers.addSampleLoggingEvent(appender);
     assertEquals(0, appender.getDiscardedLogCount());
-    addSampleLoggingEvent();
+    Helpers.addSampleLoggingEvent(appender);
     assertEquals(0, appender.getDiscardedLogCount());
-    addSampleLoggingEvent();
+    Helpers.addSampleLoggingEvent(appender);
     assertEquals(1, appender.getDiscardedLogCount());
   }
 
@@ -68,7 +62,7 @@ public class MemAppenderTests {
   @Test(expected = ConfigurationException.class)
   public void layoutNotSetExceptionTest() throws Exception {
     appender.setMaxSize(2);
-    addSampleLoggingEvent();
+    Helpers.addSampleLoggingEvent(appender);
     appender.printLogs();
   }
 
@@ -84,9 +78,9 @@ public class MemAppenderTests {
 
   @Test(expected = ConfigurationException.class)
   public void setMaxSizeLessThanExistingTest() throws ConfigurationException {
-    addSampleLoggingEvent();
-    addSampleLoggingEvent();
-    addSampleLoggingEvent();
+    Helpers.addSampleLoggingEvent(appender);
+    Helpers.addSampleLoggingEvent(appender);
+    Helpers.addSampleLoggingEvent(appender);
     appender.setMaxSize(2);
   }
 }
