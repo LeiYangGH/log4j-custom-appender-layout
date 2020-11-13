@@ -1,5 +1,6 @@
 package assign251_2;
 
+import javax.naming.ConfigurationException;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
 
@@ -46,7 +47,7 @@ public class MemAppender extends AppenderSkeleton {
         System.out.println(
             "Warn: the existing logs will be cleared to accept the new LoggingEvent list!");
       }
-      this.discardedLogCount=0;
+      this.discardedLogCount = 0;
       this.lstEvents = lst;
     } else {
       throw new RuntimeException(
@@ -71,10 +72,7 @@ public class MemAppender extends AppenderSkeleton {
       this.lstEvents.remove(0);
       this.discardedLogCount++;
     }
-    String formated = this.layout.format(loggingEvent);
     this.lstEvents.add(loggingEvent);
-//    System.out.println(loggingEvent.getRenderedMessage());
-    System.out.println(formated);
   }
 
   @Override
@@ -93,7 +91,7 @@ public class MemAppender extends AppenderSkeleton {
 
   public List<String> getEventStrings() throws Exception {
     if (this.layout == null) {
-      throw new Exception("The layout must be set before getting formatted logs!");
+      throw new ConfigurationException("The layout must be set before getting formatted logs!");
     }
     return Collections.unmodifiableList(this.getCurrentLogs().stream().map(x ->
         this.layout.format(x)).collect(Collectors.toList()));

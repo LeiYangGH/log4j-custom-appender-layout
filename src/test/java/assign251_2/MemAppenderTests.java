@@ -3,6 +3,7 @@ package assign251_2;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import javax.naming.ConfigurationException;
 import org.apache.log4j.Category;
 import org.apache.log4j.Priority;
 import org.apache.log4j.spi.LoggingEvent;
@@ -22,6 +23,7 @@ public class MemAppenderTests {
   public void DiscardedLogCountTest() {
     appender.setMaxSize(2);
     appender.setLayout(new VelocityLayout());
+    appender.setEventsList(new ArrayList<>());
     addSampleLoggingEvent();
     addSampleLoggingEvent();
     assertEquals(0, appender.getDiscardedLogCount());
@@ -45,6 +47,15 @@ public class MemAppenderTests {
     assertEquals(0, appender.getDiscardedLogCount());
     addSampleLoggingEvent();
     assertEquals(1, appender.getDiscardedLogCount());
+  }
+
+
+  @Test(expected = ConfigurationException.class)
+  public void layoutNotSetExceptionTest() throws Exception {
+    appender.setEventsList(new ArrayList<>());
+    appender.setMaxSize(2);
+    addSampleLoggingEvent();
+    appender.printLogs();
   }
 
 }
