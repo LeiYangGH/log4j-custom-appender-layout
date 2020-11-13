@@ -13,80 +13,92 @@ import java.util.stream.Collectors;
 public class MemAppender extends AppenderSkeleton {
 
 
-    private long maxSize = 10000;//default
-    private long discardedLogCount = 0;
+  private long maxSize = 10000;//default
+  private long discardedLogCount = 0;
 
-    //    private static MemAppender uniqueInstance;
-    private CopyOnWriteArrayList<LoggingEvent> lstEvents = new CopyOnWriteArrayList<>();
+  private static MemAppender uniqueInstance;
+  private List<LoggingEvent> lstEvents = new CopyOnWriteArrayList<>();
 
-//    private MemAppender() {
-//    }
-//
-//    public static MemAppender getInstance() {
-//        if (uniqueInstance == null) {
-//            synchronized (MemAppender.class) {
-//                // check again to avoid multi-thread access
-//                if (uniqueInstance == null)
-//                    uniqueInstance = new MemAppender();
-//            }
-//        }
-//        return uniqueInstance;
-//    }
+  private MemAppender() {
+  }
 
-    public long getMaxSize() {
-        return this.maxSize;
-    }
-
-    public void setMaxSize(long value) {
-        if (value <= 1) {
-            throw new InvalidParameterException("maxSize should be bigger than 0!");
+  public static MemAppender getInstance() {
+    if (uniqueInstance == null) {
+      synchronized (MemAppender.class) {
+        // check again to avoid multi-thread access
+        if (uniqueInstance == null) {
+          uniqueInstance = new MemAppender();
         }
-        this.maxSize = value;
+      }
     }
+    return uniqueInstance;
+  }
 
-    public long getDiscardedLogCount() {
-        return this.discardedLogCount;
+  public long getMaxSize() {
+    return this.maxSize;
+  }
+
+  public void setEventsList(List<LoggingEvent> lst) {
+    if (lst == null) {
+      throw new InvalidParameterException("Cannot pass a null list to MemAppender!");
+    } else if (this.lstEvents.isEmpty() && lst.isEmpty()) {
+      this.lstEvents = lst;
+    } else {
+      throw new RuntimeException(
+          "You must set an emtpy list to MemAppender before it collects logs!");
     }
+  }
 
-    @Override
-    protected void append(LoggingEvent loggingEvent) {
-        if (this.lstEvents.size() >= this.maxSize) {
-            this.lstEvents.remove(0);
-            this.discardedLogCount++;
-        }
-        String formated = this.layout.format(loggingEvent);
-        this.lstEvents.add(loggingEvent);
+  public void setMaxSize(long value) {
+    if (value <= 1) {
+      throw new InvalidParameterException("maxSize should be bigger than 0!");
+    }
+    this.maxSize = value;
+  }
+
+  public long getDiscardedLogCount() {
+    return this.discardedLogCount;
+  }
+
+  @Override
+  protected void append(LoggingEvent loggingEvent) {
+    if (this.lstEvents.size() >= this.maxSize) {
+      this.lstEvents.remove(0);
+      this.discardedLogCount++;
+    }
+    String formated = this.layout.format(loggingEvent);
+    this.lstEvents.add(loggingEvent);
 //    System.out.println(loggingEvent.getRenderedMessage());
-        System.out.println(formated);
-    }
+    System.out.println(formated);
+  }
 
-    @Override
-    public void close() {
+  @Override
+  public void close() {
 
-    }
+  }
 
-    @Override
-    public boolean requiresLayout() {
-        return true;
-    }
+  @Override
+  public boolean requiresLayout() {
+    return true;
+  }
 
-    public List<LoggingEvent> getCurrentLogs() {
-        return Collections.unmodifiableList(this.lstEvents);
-    }
+  public List<LoggingEvent> getCurrentLogs() {
+    return Collections.unmodifiableList(this.lstEvents);
+  }
 
-    public List<String> getEventStrings() throws Exception {
-        if (this.layout == null) {
-            throw new Exception("The layout must be set before getting formatted logs!");
-        }
-        return Collections.unmodifiableList(this.getCurrentLogs().stream().map(x ->
-                this.layout.format(x)).collect(Collectors.toList()));
+  public List<String> getEventStrings() throws Exception {
+    if (this.layout == null) {
+      throw new Exception("The layout must be set before getting formatted logs!");
     }
+    return Collections.unmodifiableList(this.getCurrentLogs().stream().map(x ->
+        this.layout.format(x)).collect(Collectors.toList()));
+  }
 
-    public void printLogs() throws Exception {
-        for (String s : getEventStrings()) {
-            System.out.println(s);
-        }
-        this.lstEvents.clear();
+  public void printLogs() throws Exception {
+    for (String s : getEventStrings()) {
+      System.out.println(s);
     }
+    this.lstEvents.clear();
+  }
 
 }

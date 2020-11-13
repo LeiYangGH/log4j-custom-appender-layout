@@ -11,7 +11,7 @@ public class MemAppenderTests {
 
   @Test
   public void DiscardedLogCountTest() {
-    MemAppender appender = new MemAppender();
+    MemAppender appender = MemAppender.getInstance();
     appender.setMaxSize(2);
     appender.setLayout(new VelocityLayout());
     appender
