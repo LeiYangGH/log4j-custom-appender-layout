@@ -41,7 +41,12 @@ public class MemAppender extends AppenderSkeleton {
   public void setEventsList(List<LoggingEvent> lst) {
     if (lst == null) {
       throw new InvalidParameterException("Cannot pass a null list to MemAppender!");
-    } else if (this.lstEvents.isEmpty() && lst.isEmpty()) {
+    } else if (lst.isEmpty()) {
+      if (!this.lstEvents.isEmpty()) {
+        System.out.println(
+            "Warn: the existing logs will be cleared to accept the new LoggingEvent list!");
+      }
+      this.discardedLogCount=0;
       this.lstEvents = lst;
     } else {
       throw new RuntimeException(
