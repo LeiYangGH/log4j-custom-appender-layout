@@ -55,11 +55,14 @@ public class MemAppender extends AppenderSkeleton {
     }
   }
 
-  public void setMaxSize(long value) {
+  public void setMaxSize(long value) throws ConfigurationException {
     if (value <= 1) {
       throw new InvalidParameterException("maxSize should be bigger than 0!");
+    } else if (value < lstEvents.size()) {
+      throw new ConfigurationException("maxSize should be bigger than current list size!");
+    } else {
+      this.maxSize = value;
     }
-    this.maxSize = value;
   }
 
   public long getDiscardedLogCount() {
