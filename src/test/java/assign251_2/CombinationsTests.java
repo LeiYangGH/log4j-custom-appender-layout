@@ -39,7 +39,7 @@ public class CombinationsTests {
   }
 
   @Test
-  public void ConsoleAppender_PatternLayout_Test() throws Exception {
+  public void ConsoleAppender_VelocityLayout_Test() throws Exception {
     VelocityLayout layout = new VelocityLayout();
     ConsoleAppender theAppender = new ConsoleAppender(layout);
     layout.setConversionPattern("now is [%d] this is thread [%t] we got exception [%m]");
