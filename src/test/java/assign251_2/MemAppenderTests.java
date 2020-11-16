@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.lang.reflect.Field;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import javax.naming.ConfigurationException;
@@ -80,5 +81,27 @@ public class MemAppenderTests {
     Helpers.addSampleLoggingEvent(appender);
     Helpers.addSampleLoggingEvent(appender);
     appender.setMaxSize(2);
+  }
+
+  @Test
+  public void useLinkedListTest() throws ConfigurationException {
+    appender.setEventsList(new LinkedList<>());
+    long start = System.currentTimeMillis();
+    for (int i = 0; i < 20000; i++) {
+      Helpers.addSampleLoggingEvent(appender);
+    }
+    long end = System.currentTimeMillis();
+    System.out.println("useLinkedListTest took " + (end - start) + " MilliSeconds");
+  }
+
+  @Test
+  public void useArrayListTest() throws ConfigurationException {
+    appender.setEventsList(new ArrayList<>());
+    long start = System.currentTimeMillis();
+    for (int i = 0; i < 20000; i++) {
+      Helpers.addSampleLoggingEvent(appender);
+    }
+    long end = System.currentTimeMillis();
+    System.out.println("useArrayListTest took " + (end - start) + " MilliSeconds");
   }
 }

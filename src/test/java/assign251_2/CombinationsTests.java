@@ -64,6 +64,7 @@ public class CombinationsTests {
 
   @Test
   public void setMaxSizePlus1ThenAddMaxLogsTest() throws ConfigurationException {
+    long oldMax = appender.getMaxSize();
     long newMax = appender.getMaxSize() + 1;
     appender.setMaxSize(newMax);
     appender.setLayout(new VelocityLayout());
