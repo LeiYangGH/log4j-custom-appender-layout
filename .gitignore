@@ -28,3 +28,4 @@ target/
 *.tmp
 ~*
 velocity.log*
+!assign251_2-1.0-SNAPSHOT.jar
