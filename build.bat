@@ -1,1 +1,1 @@
-mvn test-compile
+mvn clean install -P test-coverage
